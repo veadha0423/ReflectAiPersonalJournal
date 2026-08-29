@@ -1,0 +1,257 @@
+{
+  "entities": {
+    "JournalInteraction": {
+      "title": "JournalInteraction",
+      "description": "Private user journal entry and multi-turn reflection session categorized into life sectors with media, location attachments, and automated contextual health/weather/calendar data.",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique interaction identifier."
+        },
+        "userId": {
+          "type": "string",
+          "description": "The authenticated user UID owner."
+        },
+        "title": {
+          "type": "string",
+          "description": "Title of the journal reflection."
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Creation ISO 8601 timestamp."
+        },
+        "updatedAt": {
+          "type": "string",
+          "description": "Last update ISO 8601 timestamp."
+        },
+        "mode": {
+          "type": "string",
+          "enum": ["reflection", "brainstorm", "summary", "reframe", "gratitude"],
+          "description": "Reflection mode style."
+        },
+        "sector": {
+          "type": "string",
+          "description": "Multi-sector categorization or custom category ID."
+        },
+        "customCategoryId": {
+          "type": "string",
+          "description": "Optional custom user-defined category ID."
+        },
+        "moodScore": {
+          "type": "number",
+          "description": "Mood score from 1 to 10."
+        },
+        "messages": {
+          "type": "array",
+          "description": "Ordered conversation message thread."
+        },
+        "attachments": {
+          "type": "array",
+          "description": "List of user attached images/videos with vision analysis."
+        },
+        "location": {
+          "type": "object",
+          "description": "Location of the moment with coordinates and place name."
+        },
+        "contextData": {
+          "type": "object",
+          "description": "Contextual snapshot containing weather, health metrics (sleep, workouts, steps), and calendar events."
+        },
+        "summary": {
+          "type": "string",
+          "description": "Synthesized summary from Gemini AI."
+        },
+        "keyInsights": {
+          "type": "array",
+          "description": "Bullet point takeaways."
+        },
+        "tags": {
+          "type": "array",
+          "description": "Categorical and automated tags."
+        },
+        "sentimentTone": {
+          "type": "string",
+          "description": "Emotional tone descriptor."
+        },
+        "isPinned": {
+          "type": "boolean",
+          "description": "Whether the entry is pinned to favorites."
+        }
+      },
+      "required": ["id", "userId", "title", "createdAt", "updatedAt", "mode", "messages"]
+    },
+    "CustomCategory": {
+      "title": "CustomCategory",
+      "description": "User-defined custom category with custom name, emoji icon, and color theme.",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique category identifier."
+        },
+        "userId": {
+          "type": "string",
+          "description": "Owner user UID."
+        },
+        "name": {
+          "type": "string",
+          "description": "Display name of the category."
+        },
+        "emoji": {
+          "type": "string",
+          "description": "Emoji icon."
+        },
+        "description": {
+          "type": "string",
+          "description": "Short category description."
+        },
+        "color": {
+          "type": "string",
+          "description": "Color theme identifier."
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Creation ISO 8601 timestamp."
+        },
+        "updatedAt": {
+          "type": "string",
+          "description": "Update ISO 8601 timestamp."
+        }
+      },
+      "required": ["id", "userId", "name", "emoji", "createdAt"]
+    },
+    "NotificationSettings": {
+      "title": "NotificationSettings",
+      "description": "User preferences for Email and Slack journal digest and reflection reminders.",
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "Owner user UID."
+        },
+        "emailEnabled": {
+          "type": "boolean",
+          "description": "Whether email notifications are enabled."
+        },
+        "recipientEmail": {
+          "type": "string",
+          "description": "Target email address."
+        },
+        "emailTriggers": {
+          "type": "object",
+          "description": "Trigger toggles for email dispatches."
+        },
+        "slackEnabled": {
+          "type": "boolean",
+          "description": "Whether Slack webhook notifications are enabled."
+        },
+        "slackWebhookUrl": {
+          "type": "string",
+          "description": "Incoming Slack webhook URL."
+        },
+        "slackChannelName": {
+          "type": "string",
+          "description": "Slack channel name (e.g. #daily-journal)."
+        },
+        "slackBotName": {
+          "type": "string",
+          "description": "Display name for the Slack bot."
+        },
+        "slackTriggers": {
+          "type": "object",
+          "description": "Trigger toggles for Slack dispatches."
+        },
+        "reminderTime": {
+          "type": "string",
+          "description": "Daily reflection reminder time."
+        },
+        "updatedAt": {
+          "type": "string",
+          "description": "Update ISO 8601 timestamp."
+        }
+      },
+      "required": ["userId", "emailEnabled", "slackEnabled", "updatedAt"]
+    },
+    "NotificationLog": {
+      "title": "NotificationLog",
+      "description": "Audit log of dispatched notifications across Email and Slack channels.",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique log record ID."
+        },
+        "userId": {
+          "type": "string",
+          "description": "Owner user UID."
+        },
+        "channel": {
+          "type": "string",
+          "enum": ["email", "slack"],
+          "description": "Dispatch channel."
+        },
+        "triggerType": {
+          "type": "string",
+          "description": "Type of trigger."
+        },
+        "title": {
+          "type": "string",
+          "description": "Notification title."
+        },
+        "summary": {
+          "type": "string",
+          "description": "Summary or snippet content."
+        },
+        "status": {
+          "type": "string",
+          "enum": ["sent", "failed", "simulated"],
+          "description": "Delivery status."
+        },
+        "recipient": {
+          "type": "string",
+          "description": "Destination address or channel."
+        },
+        "timestamp": {
+          "type": "string",
+          "description": "Timestamp ISO 8601."
+        },
+        "error": {
+          "type": "string",
+          "description": "Error message if failed."
+        },
+        "entryId": {
+          "type": "string",
+          "description": "Optional journal interaction ID."
+        }
+      },
+      "required": ["id", "userId", "channel", "triggerType", "title", "status", "timestamp"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}/interactions/{interactionId}": {
+      "schema": {
+        "$ref": "#/entities/JournalInteraction"
+      },
+      "description": "Private user journal interactions and reflections with owner-bound isolation."
+    },
+    "/users/{userId}/custom_categories/{categoryId}": {
+      "schema": {
+        "$ref": "#/entities/CustomCategory"
+      },
+      "description": "User custom categories for deeper journal organization."
+    },
+    "/users/{userId}/notification_settings/main": {
+      "schema": {
+        "$ref": "#/entities/NotificationSettings"
+      },
+      "description": "User notification preferences for email and Slack delivery."
+    },
+    "/users/{userId}/notification_logs/{logId}": {
+      "schema": {
+        "$ref": "#/entities/NotificationLog"
+      },
+      "description": "Delivery audit records of sent email and Slack notifications."
+    }
+  }
+}
